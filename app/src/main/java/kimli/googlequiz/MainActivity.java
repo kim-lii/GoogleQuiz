@@ -1,172 +1,174 @@
 package kimli.googlequiz;
 
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btn_one, btn_two, btn_three, btn_four;
-    TextView tv_question;
-
     private Questions questionList = new Questions();
-
     private String answer;
-    private int numQuestions = questionList.questions.length;
-
-    Random random;
-
-
-    public int counter = 10;
-    TextView textView;
+    private int numQuestions = questionList.getSize();
+    private Random random;
+    private Button firstBtn, secondBtn, thirdBtn, fourthBtn;
+    private TextView questionAsked;
+    public int maxTime = 10;
+    private TextView secondsLeft;
+    private TextView score;
+    private int scoreNum = 0;
+    private ImageButton sharingButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        textView= (TextView) findViewById(R.id.countdown);
-
+        secondsLeft = (TextView) findViewById(R.id.countdown);
         final CountDownTimer timer = new CountDownTimer(10000, 1000){
             public void onTick(long millisUntilFinished){
-                textView.setText(String.valueOf(counter));
-                counter--;
+                secondsLeft.setText(String.valueOf(maxTime));
+                maxTime--;
             }
             public void onFinish(){
-                GameOver();
+                if (scoreNum > 3) {
+                    scoreNum -= 3;
+                } else {
+                    scoreNum = 0;
+                }
+                score.setText("Score: " + scoreNum);
             }
         }.start();
 
 
-
+        score = (TextView)findViewById(R.id.score);
+        score.setText("Score: " + scoreNum);
 
 
         random = new Random();
+        questionAsked = (TextView)findViewById(R.id.question);
 
-        btn_one = (Button)findViewById(R.id.firstChoice);
-        btn_one.setOnClickListener(new View.OnClickListener() {
+        firstBtn = (Button)findViewById(R.id.firstChoice);
+        firstBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_one.getText() == answer) {
+                if(firstBtn.getText() == answer) {
+                    scoreNum++;
                     NextQuestion(random.nextInt(numQuestions));
-                    counter = 10;
+                    maxTime = 10;
                     timer.cancel();
                     timer.start();
+                } else {
+                    if (scoreNum > 1) {
+                        scoreNum --;
+                    } else {
+                        scoreNum = 0;
+                    }
+                    score.setText("Score: " + scoreNum);
                 }
             }
         });
 
-        btn_two = (Button)findViewById(R.id.secondChoice);
-        btn_two.setOnClickListener(new View.OnClickListener() {
+        secondBtn = (Button)findViewById(R.id.secondChoice);
+        secondBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_two.getText() == answer) {
+                if(secondBtn.getText() == answer) {
+                    scoreNum++;
                     NextQuestion(random.nextInt(numQuestions));
-                    counter = 10;
+                    maxTime = 10;
                     timer.cancel();
                     timer.start();
+                } else {
+                    if (scoreNum > 1) {
+                        scoreNum --;
+                    } else {
+                        scoreNum = 0;
+                    }
+                    score.setText("Score: " + scoreNum);
                 }
             }
         });
 
-        btn_three = (Button)findViewById(R.id.thirdChoice);
-        btn_three.setOnClickListener(new View.OnClickListener() {
+        thirdBtn = (Button)findViewById(R.id.thirdChoice);
+        thirdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_three.getText() == answer) {
+                if(thirdBtn.getText() == answer) {
+                    scoreNum++;
                     NextQuestion(random.nextInt(numQuestions));
-                    counter = 10;
+                    maxTime = 10;
                     timer.cancel();
                     timer.start();
+                } else {
+                    if (scoreNum > 1) {
+                        scoreNum --;
+                    } else {
+                        scoreNum = 0;
+                    }
+                    score.setText("Score: " + scoreNum);
                 }
             }
         });
 
-        btn_four = (Button)findViewById(R.id.fourthChoice);
-        btn_four.setOnClickListener(new View.OnClickListener() {
+        fourthBtn = (Button)findViewById(R.id.fourthChoice);
+        fourthBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_four.getText() == answer) {
+                if(fourthBtn.getText() == answer) {
+                    scoreNum++;
                     NextQuestion(random.nextInt(numQuestions));
-                    counter = 10;
+                    maxTime = 10;
                     timer.cancel();
                     timer.start();
+                } else {
+                    if (scoreNum > 1) {
+                        scoreNum --;
+                    } else {
+                        scoreNum = 0;
+                    }
+                    score.setText("Score: " + scoreNum);
                 }
             }
         });
 
-        tv_question = (TextView)findViewById(R.id.question);
+        sharingButton = (ImageButton)findViewById(R.id.shareButton);
+        sharingButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                shareIt();
+            }
+        });
 
         NextQuestion(random.nextInt(numQuestions));
 
     }
 
-//    public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.firstChoice:
-//                if(btn_one.getText() == answer){
-//                    Toast.makeText(MainActivity.this, "You Are Correct", Toast.LENGTH_SHORT).show();
-//                    NextQuestion(random.nextInt(questionLength));
-//                }else{
-//                    GameOver();
-//                }
-//
-//                break;
-//
-//            case R.id.secondChoice:
-//                if(btn_two.getText() == answer){
-//                    Toast.makeText(MainActivity.this, "You Are Correct", Toast.LENGTH_SHORT).show();
-//                    NextQuestion(random.nextInt(questionLength));
-//                }else{
-//                    GameOver();
-//                }
-//
-//                break;
-//
-//            case R.id.thirdChoice:
-//                if(btn_three.getText() == answer){
-//                    Toast.makeText(MainActivity.this, "You Are Correct", Toast.LENGTH_SHORT).show();
-//                    NextQuestion(random.nextInt(questionLength));
-//                }else{
-//                    GameOver();
-//                }
-//
-//                break;
-//
-//            case R.id.fourthChoice:
-//                if(btn_four.getText() == answer){
-//                    Toast.makeText(MainActivity.this, "You Are Correct", Toast.LENGTH_SHORT).show();
-//                    NextQuestion(random.nextInt(questionLength));
-//                }else{
-//                    GameOver();
-//                }
-//
-//                break;
-//        }
-//    }
-
 
     private void NextQuestion(int num){
-        tv_question.setText(questionList.getQuestion(num));
-        btn_one.setText(questionList.getFirst(num));
-        btn_two.setText(questionList.getSecond(num));
-        btn_three.setText(questionList.getThird(num));
-        btn_four.setText(questionList.getFourth(num));
-
+        questionAsked.setText(questionList.getQuestion(num));
+        firstBtn.setText(questionList.getFirst(num));
+        secondBtn.setText(questionList.getSecond(num));
+        thirdBtn.setText(questionList.getThird(num));
+        fourthBtn.setText(questionList.getFourth(num));
+        score.setText("Score: " + scoreNum);
         answer = questionList.getAnswer(num);
     }
 
-    private void GameOver() {
-
+    private void shareIt() {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Here is the share content body";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
 }
