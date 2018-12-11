@@ -30,9 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        secondsLeft = (TextView) findViewById(R.id.countdown);
         final CountDownTimer timer = new CountDownTimer(10000, 1000){
             public void onTick(long millisUntilFinished){
                 secondsLeft.setText(String.valueOf(maxTime));
